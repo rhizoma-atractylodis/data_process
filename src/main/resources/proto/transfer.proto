@@ -1,0 +1,86 @@
+// Copyright 2015 gRPC authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+option go_package = "transfer/proto";
+
+package transfer;
+
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings
+message HelloReply {
+  string message = 1;
+}
+
+message TransferReply {
+  bool success = 1;
+}
+
+enum ProbeProtocol {
+  UNKNOWN = 0;
+  ICMP = 1;
+  UDP = 2;
+  TCY_SYNC = 3;
+  TCY_ACK = 4;
+}
+
+message MeasurementBaseInfo {
+  int64 recv_timestamp_millisecond = 1;
+  string host = 2;
+  string destination = 3;
+  ProbeProtocol protocol = 4;
+  int32 round = 5;
+  string measurement_prefix = 6;
+}
+
+message TransferPingRequest {
+  MeasurementBaseInfo measurement_base_result = 1;
+  float rtt_millisecond = 2;
+  // port?
+}
+
+message TransferTraceRequest {
+  MeasurementBaseInfo measurement_base_result = 1;
+  string responseIP = 2;
+  int32 hop = 3;
+  float rtt_millisecond = 4;
+  // port?
+}
+
+message ConfigBaseInfo {
+  int32 network_packet_size = 1;
+  float speed_on_host_pps = 2;
+  repeated ProbeProtocol protocol = 3;
+  string target_json = 4;
+}
+
+message TransferConfigRequest {
+  ConfigBaseInfo base_info = 1;
+  string comment = 2;
+}
+
+// The greeting service definition.
+service Transfer {
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply) {}
+  // ping data
+  rpc TransferPing (TransferPingRequest) returns (TransferReply) {}
+  // trace data
+  rpc TransferTrace (TransferTraceRequest) returns (TransferReply) {}
+}
