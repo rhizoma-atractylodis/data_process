@@ -8,7 +8,7 @@ public class Constants {
 //    public static String ETCD_KEY_DATABASE = "/DB/"+System.getenv("M_DB_NAME");
     public static String ETCD_KEY_DATABASE = "/DB/";
 //    public static String ETCD_HOST = System.getenv("M_CONFIG_ENDPOINT");
-    public static String ETCD_HOST = "http://192.168.0.191:8086";
+    public static String ETCD_HOST = "http://127.0.0.1:12345";
     public static final String KEY_INFLUXDB_URL = "influxdb_url";
     public static final String KEY_INFLUXDB_TOKEN = "influxdb_token";
     public static final String KEY_INFLUXDB_ORG = "influxdb_org";
@@ -23,10 +23,10 @@ public class Constants {
     public static final String KEY_INFLUXDB_MAX_RETRY_DELAY = "influxdb_max_retry_delay";
 
     // influxdb configuration
-    public static String INFLUXDB_URL = "http://192.168.0.191:8086";
-    public static String INFLUXDB_TOKEN = "";
+    public static String INFLUXDB_URL = "http://127.0.0.1:8086";
+    public static String INFLUXDB_TOKEN = "ZaxSSq0KAGPawjylKOslrBTwj3vAMSeLcqXIBzRlxkySb9yzHEUa30zkaWkXk8CdQatPzsUe8j25TSoF9rAaKg==";
     public static String INFLUXDB_ORG = "club203";
-    public static String INFLUXDB_BUCKET = "test-frankfurt";
+    public static String INFLUXDB_BUCKET = "test-frankfurt-origin";
     public static int CLIENT_POOL_SIZE = 96;
     public static int BATCH_SIZE = 5000;
     public static int FLUSH_INTERVAL = 1000;
