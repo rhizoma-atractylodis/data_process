@@ -5,10 +5,9 @@ package base;
  */
 public class Constants {
     // etcd configuration
-//    public static String ETCD_KEY_DATABASE = "/DB/"+System.getenv("M_DB_NAME");
-    public static String ETCD_KEY_DATABASE = "/DB/";
-//    public static String ETCD_HOST = System.getenv("M_CONFIG_ENDPOINT");
-    public static String ETCD_HOST = "http://127.0.0.1:12345";
+    public static String ETCD_KEY_DATABASE = "/DB/"+System.getenv("M_DB_NAME");
+    public static String ETCD_HOST = System.getenv("M_CONFIG_ENDPOINT");
+
     public static final String KEY_INFLUXDB_URL = "influxdb_url";
     public static final String KEY_INFLUXDB_TOKEN = "influxdb_token";
     public static final String KEY_INFLUXDB_ORG = "influxdb_org";
@@ -35,7 +34,6 @@ public class Constants {
     public static int MAX_RETRY_TIME = 100000;
     public static int MAX_RETRIES = 50;
     public static int MAX_RETRY_DELAY = 125000;
-//    public static int EXPONENTIAL_BASE = 2;
 
     // socket configuration
     public static String LOCAL_HOST = "127.0.0.1";
@@ -53,4 +51,15 @@ public class Constants {
     // data type
     public static final String PING_DATA = "ping";
     public static final String TRACE_DATA = "trace";
+
+    // ip search api
+    public static String[] IP_SEARCH_SERVERS = new String[]{"", "", ""};
+    public static String IP_SEARCH_URL = "http://{host}:8000";
+    public static String SINGLE_IP_API = "";
+    public static String MULTI_IP_API = "";
+    public static String CIDR_SEARCH_API = "";
+    public static String REVERSE_SEARCH_API = "";
+
+    // regex detection
+    public static String NOT_FOUND = "not found";
 }

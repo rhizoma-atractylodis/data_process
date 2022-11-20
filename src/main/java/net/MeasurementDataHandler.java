@@ -4,7 +4,7 @@ import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import data.DataQueue;
 import data.MeasurementDataResolver;
-import data.exception.DataTypeException;
+import exception.DataTypeException;
 import data.impl.DefaultDataResolver;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

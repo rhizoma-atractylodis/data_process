@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pojo.MeasurementData;
 import pojo.PingData;
+import pojo.TraceData;
 import store.Writeable;
 
 import java.util.ArrayList;
@@ -27,15 +28,17 @@ public class InfluxdbStore implements WorkHandler<MeasurementData>, Writeable {
     private WriteApiBlocking writer;
     private final InfluxDBClient client;
     private List<MeasurementData> dataset;
-    private AtomicInteger turn;
+    private AtomicInteger pingTurn;
+    private AtomicInteger traceTurn;
     private ConcurrentMap<String, Object> rawData;
     private Logger logger = LoggerFactory.getLogger(InfluxdbStore.class);
 
-    public InfluxdbStore(AtomicInteger turn, ConcurrentMap<String, Object> rawData) {
+    public InfluxdbStore(AtomicInteger pingTurn, AtomicInteger traceTurn, ConcurrentMap<String, Object> rawData) {
         this.client = connect();
         this.writer = createWriter();
         this.dataset = new ArrayList<>(config.getBatchSize());
-        this.turn = turn;
+        this.pingTurn = pingTurn;
+        this.traceTurn = traceTurn;
         this.rawData = rawData;
     }
 
@@ -51,15 +54,15 @@ public class InfluxdbStore implements WorkHandler<MeasurementData>, Writeable {
     public void onEvent(MeasurementData event) {
         logger.info("get data: "+event);
         writeDataByPojo(event);
-        int currentTurn = 0;
+        int currentTurn;
         if (event.getType().equals(Constants.PING_DATA)) {
             PingData pingData = (PingData) event;
-            currentTurn = this.turn.get();
+            currentTurn = this.pingTurn.get();
             if (pingData.getRound() > currentTurn) {
-                //todo compute
+                // todo compute
             }
-        } else if (event.getType().equals(Constants.TRACE_DATA)) {
-
+        } else {
+            logger.error("");
         }
     }
 

@@ -25,14 +25,16 @@ public enum DataQueue {
     private ThreadFactory threads;
     private WorkHandler<MeasurementData>[] consumer;
     private int dataStoreWorkers;
-    private AtomicInteger turn;
+    private AtomicInteger pingTurn;
+    private AtomicInteger traceTurn;
     private ConcurrentMap<String, Object> rawData;
 
 
     DataQueue(int maxLength, int storeWorkerNum) {
         this.bufferSize = maxLength;
         this.dataStoreWorkers = storeWorkerNum;
-        this.turn = new AtomicInteger(0);
+        this.pingTurn = new AtomicInteger(0);
+        this.traceTurn = new AtomicInteger(0);
         this.rawData = new ConcurrentHashMap<>();
         this.threads = new ThreadFactory() {
             @Override
@@ -48,7 +50,7 @@ public enum DataQueue {
         };
         this.consumer = new InfluxdbStore[this.dataStoreWorkers];
         for (int i = 0; i < this.dataStoreWorkers; i++) {
-            this.consumer[i] = new InfluxdbStore(this.turn, this.rawData);
+            this.consumer[i] = new InfluxdbStore(this.pingTurn, this.traceTurn, this.rawData);
         }
         this.measurementDataQueue = new Disruptor<>(this.measurementFactory, this.bufferSize, this.threads, ProducerType.MULTI, this.strategy);
     }
