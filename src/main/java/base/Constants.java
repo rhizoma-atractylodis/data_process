@@ -54,12 +54,16 @@ public class Constants {
 
     // ip search api
     public static String[] IP_SEARCH_SERVERS = new String[]{"", "", ""};
+    public static String DEFAULT_IP_SEARCH_SERVERS = "192.168.0.248";
     public static String IP_SEARCH_URL = "http://{host}:8000";
-    public static String SINGLE_IP_API = "";
+    public static String SINGLE_IP_API = "/club203/ipipnet/{ip}";
     public static String MULTI_IP_API = "";
     public static String CIDR_SEARCH_API = "";
     public static String REVERSE_SEARCH_API = "";
 
     // regex detection
     public static String NOT_FOUND = "not found";
+
+    // hash ring
+    public static int HASH_RING_VIRTUAL_NODE = 10000;
 }

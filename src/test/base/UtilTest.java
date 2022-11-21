@@ -31,7 +31,7 @@ public class UtilTest {
         Map<String, String> map = new HashMap<>();
         map.put("{host}", "127.0.0.1");
         map.put("{port}", "8086");
-        String s = StringUtils.dynamicStringReplace("http://{host}:{port}", map);
+        String s = StringUtil.dynamicStringReplace("http://{host}:{port}", map);
         System.out.println(s);
     }
 }

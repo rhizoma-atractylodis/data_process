@@ -1,14 +1,12 @@
 package base;
 
 import exception.TargetNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class StringUtils {
+public class StringUtil {
 
     public static String dynamicStringReplace(String s, Map<String, String> map) throws TargetNotFoundException {
         Matcher matcher = regMatch("\\{([^}])*\\}", s);
