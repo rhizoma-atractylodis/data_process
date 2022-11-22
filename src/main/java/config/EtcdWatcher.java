@@ -23,9 +23,19 @@ public enum EtcdWatcher {
     EtcdWatcher(String etcdKey, String hosts) {
         this.etcdKey = etcdKey;
         this.hosts = hosts;
-        this.etcdClient = Client.builder().endpoints(this.hosts.split(",")).build();
-        this.databaseConfigWatcher = this.etcdClient.getWatchClient();
-        this.databaseConfig = this.etcdClient.getKVClient();
+        try {
+            String[] endpoints = this.hosts.split(",");
+            for (int i = 0; i < endpoints.length; i++) {
+                if (!endpoints[i].startsWith("http://")) {
+                    endpoints[i] = "http://" + endpoints[i];
+                }
+            }
+            this.etcdClient = Client.builder().endpoints(endpoints).build();
+            this.databaseConfigWatcher = this.etcdClient.getWatchClient();
+            this.databaseConfig = this.etcdClient.getKVClient();
+        } catch (IllegalArgumentException e) {
+            logger.error(e.getMessage());
+        }
     }
 
     public DatabaseConfig getDatabaseConfig() {

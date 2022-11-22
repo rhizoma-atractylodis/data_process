@@ -17,6 +17,7 @@ import store.Writeable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -32,6 +33,15 @@ public class InfluxdbStore implements WorkHandler<MeasurementData>, Writeable {
     private AtomicInteger traceTurn;
     private ConcurrentMap<String, Object> rawData;
     private Logger logger = LoggerFactory.getLogger(InfluxdbStore.class);
+
+    public InfluxdbStore() {
+        this.client = connect();
+        this.writer = createWriter();
+        this.dataset = new ArrayList<>(config.getBatchSize());
+        this.pingTurn = new AtomicInteger(0);
+        this.traceTurn = new AtomicInteger(0);
+        this.rawData = new ConcurrentHashMap<>();
+    }
 
     public InfluxdbStore(AtomicInteger pingTurn, AtomicInteger traceTurn, ConcurrentMap<String, Object> rawData) {
         this.client = connect();
@@ -87,5 +97,9 @@ public class InfluxdbStore implements WorkHandler<MeasurementData>, Writeable {
     @Override
     public void writeDataByPoint() {
 
+    }
+
+    public WriteApiBlocking getWriter() {
+        return writer;
     }
 }

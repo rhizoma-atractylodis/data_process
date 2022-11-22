@@ -38,18 +38,17 @@ public class MeasurementDataServer {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             socketChannel.pipeline()
-                                    .addLast(new MeasurementDataDecoder(1024, Unpooled.copiedBuffer("\n".getBytes())))
-                                    .addLast(new StringDecoder())
-                                    .addLast(new StringEncoder())
-                                    .addLast(new MeasurementDataHandler());
+//                                    .addLast(new MeasurementDataDecoder(1024, Unpooled.copiedBuffer("\n".getBytes())))
+                                    .addLast("measurement", new MeasurementDataHandler());
                         }
                     })
                     .option(ChannelOption.SO_BACKLOG, 128)
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
+            logger.info("waiting data");
             ChannelFuture f = b.bind(this.port).sync();
             f.channel().closeFuture().sync();
         } catch (Exception e) {
-            logger.error("connection error");
+            logger.error("connection error " + e.getMessage());
         } finally {
             workGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
