@@ -1,6 +1,7 @@
 package config;
 
 import base.Constants;
+import config.cfg.DatabaseConfig;
 import io.etcd.jetcd.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

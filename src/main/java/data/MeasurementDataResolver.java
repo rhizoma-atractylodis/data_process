@@ -1,5 +1,7 @@
 package data;
 
+import pojo.MeasurementData;
+
 import java.util.Map;
 
 @FunctionalInterface

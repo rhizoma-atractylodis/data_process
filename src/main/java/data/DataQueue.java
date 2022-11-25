@@ -14,6 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public enum DataQueue {
     QUEUE(Constants.DATA_QUEUE_MAX_LEN, Constants.DATA_STORE_WORKER_NUMBER);
@@ -36,6 +38,7 @@ public enum DataQueue {
         this.pingTurn = new AtomicInteger(0);
         this.traceTurn = new AtomicInteger(0);
         this.rawData = new ConcurrentHashMap<>();
+        Lock lock = new ReentrantLock();
         this.threads = new ThreadFactory() {
             @Override
             public Thread newThread(@NotNull Runnable r) {
@@ -50,7 +53,7 @@ public enum DataQueue {
         };
         this.consumer = new InfluxdbStore[this.dataStoreWorkers];
         for (int i = 0; i < this.dataStoreWorkers; i++) {
-            this.consumer[i] = new InfluxdbStore(this.pingTurn, this.traceTurn, this.rawData);
+            this.consumer[i] = new InfluxdbStore(this.pingTurn, this.traceTurn, lock, this.rawData);
         }
         this.measurementDataQueue = new Disruptor<>(this.measurementFactory, this.bufferSize, this.threads, ProducerType.MULTI, this.strategy);
     }

@@ -1,4 +1,4 @@
-package thread;
+package queue;
 
 import com.lmax.disruptor.WorkHandler;
 import pojo.MeasurementData;

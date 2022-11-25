@@ -1,11 +1,8 @@
-package config;
+package config.cfg;
 
 import base.Constants;
-import com.google.api.client.json.Json;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import io.etcd.jetcd.KeyValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

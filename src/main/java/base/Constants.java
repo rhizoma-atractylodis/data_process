@@ -1,5 +1,8 @@
 package base;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author atractylodis
  */
@@ -7,6 +10,24 @@ public class Constants {
     // etcd configuration
     public static String ETCD_KEY_DATABASE = "/DB/"+System.getenv("M_DB_NAME");
     public static String ETCD_HOST = System.getenv("M_CONFIG_ENDPOINT");
+
+    // redis configuration
+    public static String REDIS_HOST = "localhost";
+    public static int REDIS_PORT = 6379;
+    public static int REDIS_TIMEOUT = 100000;
+    public static String REDIS_PASSWORD = "";
+    public static int REDIS_MAX_TOTAL = 16;
+    public static int REDIS_MAX_IDLE = 8;
+    public static int REDIS_MIN_IDLE = 0;
+    public static boolean REDIS_BLOCK_WHEN_EXHAUSTED = true;
+    public static int REDIS_MAX_WAIT_MILLS = -1;
+    public static boolean REDIS_TEST_ON_BORROW = false;
+    public static boolean REDIS_TEST_ON_RETURN = false;
+    public static boolean REDIS_JMX_ENABLE = true;
+    public static boolean REDIS_TEST_WHILE_IDLE = false;
+    public static int REDIS_TIME_BETWEEN_EVICTION_RUNS_MILLS = -1;
+    public static int REDIS_MIN_EVICTABLE_IDLE_TIME_MILLS = 1800000;
+    public static int REDIS_NUM_TESTS_PER_EVICTION_RUN = 3;
 
     public static final String KEY_INFLUXDB_URL = "influxdb_url";
     public static final String KEY_INFLUXDB_TOKEN = "influxdb_token";
@@ -66,4 +87,6 @@ public class Constants {
 
     // hash ring
     public static int HASH_RING_VIRTUAL_NODE = 10000;
+
+    public static Map<Integer, String> PROTOCOL_MAP = new HashMap<>();
 }

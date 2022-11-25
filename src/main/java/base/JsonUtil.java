@@ -9,4 +9,13 @@ public class JsonUtil {
         Gson gson = new Gson();
         return gson.fromJson(json, Map.class);
     }
+
+    public static String toJson(Object obj) {
+        Gson gson = new Gson();
+        return gson.toJson(obj);
+    }
+
+    public static Map<String, Object> mapDeepcopy(Map<String, Object> map) {
+        return JsonUtil.fromJson(JsonUtil.toJson(map));
+    }
 }

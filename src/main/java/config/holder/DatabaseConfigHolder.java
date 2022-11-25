@@ -1,6 +1,8 @@
-package config;
+package config.holder;
 
 import base.Constants;
+import config.cfg.DatabaseConfig;
+import config.EtcdWatcher;
 import io.etcd.jetcd.KeyValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +16,7 @@ import java.util.function.Function;
 /**
  * @author atractylodis
  */
-public enum ConfigHolder {
+public enum DatabaseConfigHolder {
     DEFAULT_CONFIG_HOLDER(kv -> {
         DatabaseConfig cfg = DatabaseConfig.DEFAULT_CONFIG;
         String key = kv.getKey().toString();
@@ -45,9 +47,9 @@ public enum ConfigHolder {
     private ExecutorService watcherWorker;
     private boolean needReload = false;
     private Lock lock;
-    private Logger logger = LoggerFactory.getLogger(ConfigHolder.class);
+    private Logger logger = LoggerFactory.getLogger(DatabaseConfigHolder.class);
 
-    ConfigHolder(Function<KeyValue, DatabaseConfig> callback) {
+    DatabaseConfigHolder(Function<KeyValue, DatabaseConfig> callback) {
         this.configCallback = callback;
         this.etcdWatcher = EtcdWatcher.DATABASE_CONFIG_WATCHER;
         this.databaseConfig = etcdWatcher.getDatabaseConfig();

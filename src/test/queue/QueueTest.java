@@ -1,4 +1,4 @@
-package thread;
+package queue;
 
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
