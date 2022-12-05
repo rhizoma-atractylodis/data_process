@@ -13,7 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class TestDB {
     @Test
     public void testDB() {
-        InfluxdbStore influxdbStore = new InfluxdbStore(new ReentrantLock());
+        InfluxdbStore influxdbStore = new InfluxdbStore();
         PingData pingData = new PingData();
         pingData.setHost("123.123.123.123");
         pingData.setDestA("123");

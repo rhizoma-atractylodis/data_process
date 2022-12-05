@@ -16,7 +16,6 @@ import store.impl.InfluxdbStore;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -27,7 +26,7 @@ public class DefaultDataComputer implements MeasurementDataComputer {
 
     public DefaultDataComputer() {
         this.lock = new ReentrantLock();
-        this.store = new InfluxdbStore(this.lock);
+        this.store = new InfluxdbStore();
     }
 
     @Override

@@ -88,5 +88,4 @@ public class Constants {
     // hash ring
     public static int HASH_RING_VIRTUAL_NODE = 10000;
 
-    public static Map<Integer, String> PROTOCOL_MAP = new HashMap<>();
-}
+    public static Map<Integer, String> PROTOCOL_MAP = new HashMap<>();}

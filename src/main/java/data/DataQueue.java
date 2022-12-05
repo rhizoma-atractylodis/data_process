@@ -8,10 +8,9 @@ import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import org.jetbrains.annotations.NotNull;
 import pojo.MeasurementData;
-import store.impl.InfluxdbStore;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
@@ -29,7 +28,7 @@ public enum DataQueue {
     private int dataStoreWorkers;
     private AtomicInteger pingTurn;
     private AtomicInteger traceTurn;
-    private ConcurrentMap<String, Object> rawData;
+    private Map<String, Object> rawData;
 
 
     DataQueue(int maxLength, int storeWorkerNum) {
@@ -51,14 +50,22 @@ public enum DataQueue {
                 return new MeasurementData();
             }
         };
-        this.consumer = new InfluxdbStore[this.dataStoreWorkers];
+        this.consumer = new DataQueueWorker[this.dataStoreWorkers];
         for (int i = 0; i < this.dataStoreWorkers; i++) {
-            this.consumer[i] = new InfluxdbStore(this.pingTurn, this.traceTurn, lock, this.rawData);
+            this.consumer[i] = new DataQueueWorker(this.pingTurn, this.traceTurn, lock, this.rawData);
         }
         this.measurementDataQueue = new Disruptor<>(this.measurementFactory, this.bufferSize, this.threads, ProducerType.MULTI, this.strategy);
     }
 
     public Disruptor<MeasurementData> getMeasurementDataQueue() {
         return this.measurementDataQueue;
+    }
+
+    public void start() {
+        this.measurementDataQueue.start();
+    }
+
+    public void stop() {
+        this.measurementDataQueue.shutdown();
     }
 }
