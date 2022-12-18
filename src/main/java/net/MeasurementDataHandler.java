@@ -28,6 +28,7 @@ public class MeasurementDataHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        //TODO 分割数据，有乱码字节
         if (msg != null) {
             ByteBuf buf = (ByteBuf) msg;
             int i = buf.readableBytes();
@@ -52,6 +53,7 @@ public class MeasurementDataHandler extends ChannelInboundHandlerAdapter {
             for (String message : messages) {
                 System.out.println(message);
             }
+            //数据放到queue里
 //            for (int j = 0; j < messages.length - 1; j++) {
 //                System.out.println(messages[j]);
 //                Disruptor<MeasurementData> queue = dataQueue.getMeasurementDataQueue();

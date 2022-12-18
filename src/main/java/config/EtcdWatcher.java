@@ -67,6 +67,7 @@ public enum EtcdWatcher {
 
     public DatabaseConfig watchDatabaseConfig(Function<KeyValue, DatabaseConfig> callback) {
         AtomicReference<DatabaseConfig> cfg = new AtomicReference<>(DatabaseConfig.DEFAULT_CONFIG);
+        //TODO 检测不到配置更新
         databaseConfigWatcher.watch(ByteSequence.from(this.etcdKey.getBytes()), listener -> listener.getEvents().forEach(event -> {
             switch (event.getEventType()) {
                 case DELETE -> {
