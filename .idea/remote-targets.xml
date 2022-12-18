@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="RemoteTargetsManager">
-    <option name="projectDefaultTargetUuid" value="a5e24b75-64b1-4343-bda1-b7d332b8ba2e" />
+    <option name="projectDefaultTargetUuid" value="5f937bbf-0a64-4c6c-b578-3836842eaa05" />
     <targets>
-      <target name="root@101.89.68.12:12138" type="ssh/sftp" uuid="a5e24b75-64b1-4343-bda1-b7d332b8ba2e">
+      <target name="root@106.3.133.4:12138" type="ssh/sftp" uuid="a5e24b75-64b1-4343-bda1-b7d332b8ba2e">
         <config>
           <option name="projectRootOnTarget" value="/root/data_process" />
-          <option name="serverName" value="root@101.89.68.12:12138 password" />
+          <option name="serverName" value="root@106.3.133.4:12138" />
+          <option name="useRsync" value="true" />
+        </config>
+        <ContributedStateBase type="JavaLanguageRuntime">
+          <config>
+            <option name="homePath" value="/usr/java/jdk-17.0.5" />
+            <option name="javaVersionString" value="17.0.5" />
+          </config>
+        </ContributedStateBase>
+      </target>
+      <target name="root@106.3.133.4:22" type="ssh/sftp" uuid="5f937bbf-0a64-4c6c-b578-3836842eaa05">
+        <config>
+          <option name="projectRootOnTarget" value="/root/data_process" />
+          <option name="serverName" value="root@106.3.133.4:22 password" />
           <option name="useRsync" value="true" />
         </config>
         <ContributedStateBase type="JavaLanguageRuntime">

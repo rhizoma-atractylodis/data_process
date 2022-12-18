@@ -18,6 +18,7 @@ import java.util.function.Function;
  */
 public enum DatabaseConfigHolder {
     DEFAULT_CONFIG_HOLDER(kv -> {
+        System.out.println("change change change");
         DatabaseConfig cfg = DatabaseConfig.DEFAULT_CONFIG;
         String key = kv.getKey().toString();
         String value = kv.getValue().toString();
@@ -58,9 +59,13 @@ public enum DatabaseConfigHolder {
             logger.warn("cannot find configuration, use default_config");
         }
         this.watcherWorker = Executors.newSingleThreadExecutor();
+        logger.info("get watcher worker");
         this.watcherWorker.execute(() -> {
-            DatabaseConfig newCfg = this.etcdWatcher.watchDatabaseConfig(this.configCallback);
-            this.watchCallBack(newCfg);
+            logger.info("start watch db config");
+            while(true) {
+                DatabaseConfig newCfg = this.etcdWatcher.watchDatabaseConfig(this.configCallback);
+                this.watchCallBack(newCfg);
+            }
         });
         this.lock = new ReentrantLock();
     }

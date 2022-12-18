@@ -55,6 +55,7 @@ public enum DataQueue {
             this.consumer[i] = new DataQueueWorker(this.pingTurn, this.traceTurn, lock, this.rawData);
         }
         this.measurementDataQueue = new Disruptor<>(this.measurementFactory, this.bufferSize, this.threads, ProducerType.MULTI, this.strategy);
+        measurementDataQueue.handleEventsWithWorkerPool(this.consumer);
     }
 
     public Disruptor<MeasurementData> getMeasurementDataQueue() {

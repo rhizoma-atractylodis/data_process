@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -62,5 +63,12 @@ public class UtilTest {
         map1.put("{host}", "modify");
         System.out.println(map);
         System.out.println(map1);
+    }
+
+    @Test
+    public void testListJson() {
+        String s = "[\"160.168.171.11:52:1227.442\",\"160.168.171.22:243:92.229\"]";
+        List<Object> objects = JsonUtil.fromJsonList(s);
+        System.out.println(objects);
     }
 }

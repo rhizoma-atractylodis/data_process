@@ -10,8 +10,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.codec.LineBasedFrameDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +19,7 @@ public class MeasurementDataServer {
     private Logger logger = LoggerFactory.getLogger(MeasurementDataServer.class);
 
     public MeasurementDataServer() {
-        new MeasurementDataServer(Constants.NETTY_PORT);
+        this(Constants.NETTY_PORT);
     }
 
     public MeasurementDataServer(int port) {
@@ -38,7 +37,8 @@ public class MeasurementDataServer {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             socketChannel.pipeline()
-//                                    .addLast(new MeasurementDataDecoder(1024, Unpooled.copiedBuffer("\n".getBytes())))
+//                                    .addLast(new MeasurementDataDecoder(2048, true, false))
+//                                    .addLast(new LineBasedFrameDecoder(2048))
                                     .addLast("measurement", new MeasurementDataHandler());
                         }
                     })

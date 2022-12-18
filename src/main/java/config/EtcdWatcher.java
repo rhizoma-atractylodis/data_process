@@ -32,7 +32,11 @@ public enum EtcdWatcher {
                 }
             }
             this.etcdClient = Client.builder().endpoints(endpoints).build();
+            logger.info("connect to etcd "+ this.etcdClient);
             this.databaseConfigWatcher = this.etcdClient.getWatchClient();
+            if (this.databaseConfigWatcher != null) {
+                logger.info("get watcher to db");
+            }
             this.databaseConfig = this.etcdClient.getKVClient();
         } catch (IllegalArgumentException e) {
             logger.error(e.getMessage());
@@ -57,7 +61,7 @@ public enum EtcdWatcher {
                 return null;
             }
         }
-        logger.info("get config success");
+        logger.info("get config success "+ config);
         return DatabaseConfig.fromList(config);
     }
 
