@@ -871,25 +871,20 @@ public class Temp {
         String errorS = "";
         try {
             writer = new BufferedWriter(new FileWriter("/home/na.txt"));
-            for (String s : arr) {
-                errorS = s;
-                String[] split = s.split("\\.");
-                int count = (int)Arrays.stream(split).filter(e -> e.equals("0")).count();
-//                System.out.println(count);
-                switch (count) {
-                    case 1 -> {
-                        writer.write(s + "/24");
-                        writer.newLine();
+            for (int i = 0; i < arr.length-1; i+=2) {
+                String start = arr[i];
+                String end = arr[i+1];
+                List<Integer> startSeg = Arrays.stream(start.split("\\.")).map(Integer::parseInt).toList();
+                List<Integer> endSeg = Arrays.stream(end.split("\\.")).map(Integer::parseInt).toList();
+                int[] startArr = new int[]{startSeg.get(0), startSeg.get(1), startSeg.get(2), startSeg.get(3)};
+                int[] endArr = new int[]{endSeg.get(0), endSeg.get(1), endSeg.get(2), endSeg.get(3)};
+                for (int j = startArr[0]; j <= endArr[0]; j++) {
+                    for (int k = startArr[1]; k <= endArr[1]; k++) {
+                        for (int l = startArr[2]; l <= endArr[2]; l++) {
+                            writer.write(j+"."+k+"."+l+".0/24");
+                            writer.newLine();
+                        }
                     }
-                    case 2 -> {
-                        writer.write(s + "/16");
-                        writer.newLine();
-                    }
-                    case 3 -> {
-                        writer.write(s + "/8");
-                        writer.newLine();
-                    }
-                    default -> System.out.println("error");
                 }
             }
         } catch (IOException e) {

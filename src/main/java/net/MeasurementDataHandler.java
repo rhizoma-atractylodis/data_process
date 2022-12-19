@@ -28,54 +28,53 @@ public class MeasurementDataHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        //TODO 分割数据，有乱码字节
         if (msg != null) {
             ByteBuf buf = (ByteBuf) msg;
             int i = buf.readableBytes();
             byte[] arr = new byte[i];
             buf.readBytes(arr);
-            byte[] bytes = Arrays.copyOfRange(arr, 6, arr.length);
+//            byte[] bytes = Arrays.copyOfRange(arr, 6, arr.length);
 //            for (byte b : arr) {
 //                System.out.print(b + " ");
 //            }
 //            System.out.print(new String(arr) + "\n");
-            String[] messages = new String(bytes).split("\n");
-            this.buffer = messages[messages.length - 1];
+//            String[] messages = new String(bytes).split("\n");
+//            this.buffer = messages[messages.length - 1];
 
 
 //            System.out.println(msg);
 //            System.out.println(message);
 //            byte[] bytes = Arrays.copyOfRange(arr, 6, arr.length);
 //            System.out.println(new String(arr));
-            if (!this.buffer.equals("")) {
-                messages[0] = this.buffer+messages[0];
-            }
-            for (String message : messages) {
-                System.out.println(message);
-            }
+//            if (!this.buffer.equals("")) {
+//                messages[0] = this.buffer+messages[0];
+//            }
+//            for (String message : messages) {
+//                System.out.println(message);
+//            }
             //数据放到queue里
 //            for (int j = 0; j < messages.length - 1; j++) {
-//                System.out.println(messages[j]);
-//                Disruptor<MeasurementData> queue = dataQueue.getMeasurementDataQueue();
-//                RingBuffer<MeasurementData> ringBuffer = queue.getRingBuffer();
-//                long seq = ringBuffer.next();
-//                try {
-//                    MeasurementData dataSlot = ringBuffer.get(seq);
-//                    String line = messages[j];
-//                    logger.info(line);
-//                    MeasurementDataResolver resolver = new DefaultDataResolver();
-//                    Object result = resolver.resolveLineData(line);
-//                    if (result instanceof MeasurementData) {
-//                        dataSlot.setByData(((MeasurementData) result));
-//                    } else {
-//                        throw new DataTypeException();
-//                    }
-//                } catch (DataTypeException e) {
-//                    logger.error(e.getMessage());
-//                } finally {
-//                    ringBuffer.publish(seq);
-//                }
+//
 //            }
+            Disruptor<MeasurementData> queue = dataQueue.getMeasurementDataQueue();
+            RingBuffer<MeasurementData> ringBuffer = queue.getRingBuffer();
+            long seq = ringBuffer.next();
+            try {
+                MeasurementData dataSlot = ringBuffer.get(seq);
+                String line = new String(arr);
+                logger.info(line);
+                MeasurementDataResolver resolver = new DefaultDataResolver();
+                Object result = resolver.resolveLineData(line);
+                if (result instanceof MeasurementData) {
+                    dataSlot.setByData(((MeasurementData) result));
+                } else {
+                    throw new DataTypeException();
+                }
+            } catch (DataTypeException e) {
+                logger.error(e.getMessage());
+            } finally {
+                ringBuffer.publish(seq);
+            }
         }
     }
 
