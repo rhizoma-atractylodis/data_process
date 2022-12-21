@@ -52,11 +52,14 @@ public enum DataQueue {
             }
         };
         this.consumer = new DataQueueWorker[this.dataStoreWorkers];
+//        this.consumer = new Consumer[this.dataStoreWorkers];
         for (int i = 0; i < this.dataStoreWorkers; i++) {
             this.consumer[i] = new DataQueueWorker(this.pingTurn, this.traceTurn, lock, this.rawData);
+//            this.consumer[i] = new Consumer();
         }
         this.measurementDataQueue = new Disruptor<>(this.measurementFactory, this.bufferSize, this.threads, ProducerType.MULTI, this.strategy);
         measurementDataQueue.handleEventsWithWorkerPool(this.consumer);
+        this.measurementDataQueue.start();
     }
 
     public Disruptor<DisruptorEvent> getMeasurementDataQueue() {

@@ -1,8 +1,7 @@
-package queue;
+package data;
 
 import com.lmax.disruptor.WorkHandler;
 import pojo.DisruptorEvent;
-import pojo.MeasurementData;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
