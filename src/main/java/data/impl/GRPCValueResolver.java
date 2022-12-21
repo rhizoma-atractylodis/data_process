@@ -12,6 +12,7 @@ import pojo.TraceData;
 import transfer.TransferOuterClass;
 
 import java.lang.reflect.InvocationTargetException;
+import java.time.Instant;
 import java.util.Map;
 
 public class GRPCValueResolver implements ValueResolver {
@@ -50,9 +51,10 @@ public class GRPCValueResolver implements ValueResolver {
             dataClass.getMethod("setDestC", String.class).invoke(data, netSeg[2]);
             dataClass.getMethod("setDestD", String.class).invoke(data, netSeg[3]);
             dataClass.getMethod("setProtocol", String.class).invoke(data,
-                    Constants.PROTOCOL_MAP.get(base.getProtocolValue()));
+                    Constants.PROTOCOL_MAP[base.getProtocolValue()]);
             dataClass.getMethod("setRound", Integer.class).invoke(data, base.getRound());
             dataClass.getMethod("setMeasurementPrefix", String.class).invoke(data, base.getMeasurementPrefix());
+            dataClass.getMethod("setTime", Instant.class).invoke(data, Instant.ofEpochMilli(base.getRecvTimestampMillisecond()));
             dataClass.getMethod("setCountry", String.class).invoke(data, String.valueOf(
                     ipInfo.getOrDefault("country_name", "unknown")));
             dataClass.getMethod("setRegion", String.class).invoke(data, String.valueOf(
