@@ -11,7 +11,10 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pojo.DisruptorEvent;
 import pojo.MeasurementData;
+import pojo.PingData;
+import pojo.TraceData;
 
 import java.util.Arrays;
 
@@ -56,23 +59,26 @@ public class MeasurementDataHandler extends ChannelInboundHandlerAdapter {
 //            for (int j = 0; j < messages.length - 1; j++) {
 //
 //            }
-            Disruptor<MeasurementData> queue = dataQueue.getMeasurementDataQueue();
-            RingBuffer<MeasurementData> ringBuffer = queue.getRingBuffer();
+            Disruptor<DisruptorEvent> queue = dataQueue.getMeasurementDataQueue();
+            RingBuffer<DisruptorEvent> ringBuffer = queue.getRingBuffer();
             long seq = ringBuffer.next();
             try {
-                MeasurementData dataSlot = ringBuffer.get(seq);
+                DisruptorEvent dataSlot = ringBuffer.get(seq);
                 String line = new String(arr);
                 logger.info(line);
                 MeasurementDataResolver resolver = new DefaultDataResolver();
                 Object result = resolver.resolveLineData(line);
-                if (result instanceof MeasurementData) {
-                    dataSlot.setByData(((MeasurementData) result));
+                if (result instanceof PingData ping) {
+                    dataSlot.setData(ping);
+                } else if (result instanceof TraceData trace) {
+                    dataSlot.setData(trace);
                 } else {
                     throw new DataTypeException();
                 }
             } catch (DataTypeException e) {
                 logger.error(e.getMessage());
             } finally {
+                //发布
                 ringBuffer.publish(seq);
             }
         }

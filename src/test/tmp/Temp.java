@@ -903,7 +903,7 @@ public class Temp {
 
     @Test
     public void ips() {
-        List<File> files = FileUtils.listFiles(new File("/home/data/trace"), new IOFileFilter() {
+        List<File> files = FileUtils.listFiles(new File("/home/falcon-data/trace/"), new IOFileFilter() {
             @Override
             public boolean accept(File file) {
                 if (file.isFile()) {

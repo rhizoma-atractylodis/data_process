@@ -4,6 +4,7 @@ import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import data.DataQueue;
 import org.junit.Test;
+import pojo.DisruptorEvent;
 import pojo.MeasurementData;
 import pojo.PingData;
 
@@ -15,14 +16,14 @@ public class QueueTest {
     @Test
     public void TestDisruptor() throws InterruptedException {
         DataQueue queue = DataQueue.QUEUE;
-        Disruptor<MeasurementData> measurementDataQueue = queue.getMeasurementDataQueue();
+        Disruptor<DisruptorEvent> measurementDataQueue = queue.getMeasurementDataQueue();
         measurementDataQueue.handleEventsWithWorkerPool(new Consumer(global), new Consumer(global));
         measurementDataQueue.start();
-        RingBuffer<MeasurementData> ringBuffer = measurementDataQueue.getRingBuffer();
+        RingBuffer<DisruptorEvent> ringBuffer = measurementDataQueue.getRingBuffer();
         Producer producer = new Producer(ringBuffer);
 
         for(int i=0; i<100; i++){
-            producer.pushData(new PingData());
+            producer.pushData(new DisruptorEvent());
             Thread.sleep(100);
             System.out.println("push data " + i);
         }

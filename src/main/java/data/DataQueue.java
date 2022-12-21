@@ -7,6 +7,7 @@ import com.lmax.disruptor.WorkHandler;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import org.jetbrains.annotations.NotNull;
+import pojo.DisruptorEvent;
 import pojo.MeasurementData;
 
 import java.util.Map;
@@ -19,12 +20,12 @@ import java.util.concurrent.locks.ReentrantLock;
 public enum DataQueue {
     QUEUE(Constants.DATA_QUEUE_MAX_LEN, Constants.DATA_STORE_WORKER_NUMBER);
 
-    private Disruptor<MeasurementData> measurementDataQueue;
+    private Disruptor<DisruptorEvent> measurementDataQueue;
     private BlockingWaitStrategy strategy = new BlockingWaitStrategy();
     private int bufferSize;
-    private EventFactory<MeasurementData> measurementFactory;
+    private EventFactory<DisruptorEvent> measurementFactory;
     private ThreadFactory threads;
-    private WorkHandler<MeasurementData>[] consumer;
+    private WorkHandler<DisruptorEvent>[] consumer;
     private int dataStoreWorkers;
     private AtomicInteger pingTurn;
     private AtomicInteger traceTurn;
@@ -44,10 +45,10 @@ public enum DataQueue {
                 return new Thread(r);
             }
         };
-        this.measurementFactory = new EventFactory<MeasurementData>() {
+        this.measurementFactory = new EventFactory<DisruptorEvent>() {
             @Override
-            public MeasurementData newInstance() {
-                return new MeasurementData();
+            public DisruptorEvent newInstance() {
+                return new DisruptorEvent();
             }
         };
         this.consumer = new DataQueueWorker[this.dataStoreWorkers];
@@ -58,7 +59,7 @@ public enum DataQueue {
         measurementDataQueue.handleEventsWithWorkerPool(this.consumer);
     }
 
-    public Disruptor<MeasurementData> getMeasurementDataQueue() {
+    public Disruptor<DisruptorEvent> getMeasurementDataQueue() {
         return this.measurementDataQueue;
     }
 

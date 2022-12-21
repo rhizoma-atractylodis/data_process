@@ -72,6 +72,7 @@ public class DefaultDataComputer implements MeasurementDataComputer {
             Point point = new Point("ping_stat");
             point.addTags(tags);
             point.addFields(fields);
+            //数据写数据库
             this.store.writeDataByPoint(point);
         });
     }
@@ -81,10 +82,15 @@ public class DefaultDataComputer implements MeasurementDataComputer {
             logger.error("");
             return null;
         }
+        //平均值
         double mean = collector.getMean();
+        //标准差
         double std = collector.getStandardDeviation();
+        //偏度
         double skew = collector.getSkewness();
+        //峰度
         double kurt = collector.getKurtosis();
+        //分位数
         double[] percentiles = StatisticUtil.computeMultiPercentile(collector, n);
         return new double[][]{{mean, std, skew, kurt}, percentiles};
     }

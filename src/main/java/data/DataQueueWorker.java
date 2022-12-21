@@ -8,6 +8,7 @@ import data.impl.ThreeLevelDataCollector;
 import org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pojo.DisruptorEvent;
 import pojo.MeasurementData;
 import pojo.PingData;
 import pojo.compute.City;
@@ -23,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class DataQueueWorker implements WorkHandler<MeasurementData> {
+public class DataQueueWorker implements WorkHandler<DisruptorEvent> {
     private volatile AtomicInteger pingTurn;
     private volatile AtomicInteger traceTurn;
     private volatile Map<String, Object> rawData;
@@ -54,13 +55,15 @@ public class DataQueueWorker implements WorkHandler<MeasurementData> {
     }
 
     @Override
-    public void onEvent(MeasurementData event) {
+    public void onEvent(DisruptorEvent event) {
         logger.info("get data: "+event);
-        writer.writeDataByPojo(event);
+        MeasurementData data = event.getData();
+        writer.writeDataByPojo(data);
         int currentTurn;
-        if (event.getType().equals(Constants.PING_DATA)) {
-            PingData pingData = (PingData) event;
+        if (data.getType().equals(Constants.PING_DATA)) {
+            PingData pingData = (PingData) data;
             currentTurn = this.pingTurn.get();
+            //轮次大于上一条就开始计算
             if (pingData.getRound() > currentTurn) {
                 Map<String, Object> dataMap;
                 try {
@@ -71,8 +74,10 @@ public class DataQueueWorker implements WorkHandler<MeasurementData> {
                 } finally {
                     lock.unlock();
                 }
+                //计算
                 this.computer.compute(dataMap);
             }
+            //数据分类，分类标准是国家，省份，城市，网段
             try {
                 lock.lock();
                 String country = pingData.getCountry();
